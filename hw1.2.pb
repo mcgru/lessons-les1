@@ -1,0 +1,35 @@
+#!/usr/bin/ansible-playbook
+---
+- name: homework 1.2
+  hosts: webservers
+  become: yes
+  become_user: root
+
+  tasks:
+
+  - name: switch off NetworkManager
+    systemd:
+      name: NetworkManager
+      state: stopped
+      enabled: no
+
+  - name: change grub - check
+    shell: |
+      grep -P "net.ifnames=.*biosdevname=|biosdevname=.*net.ifnames=" /etc/default/grub
+    register: grub_has_items
+    ignore_errors: True
+    changed_when: False
+
+  - name: change grub - edit
+    when: grub_has_items.rc > 0
+    lineinfile:
+      path: /etc/default/grub
+      regexp: ^\s*GRUB_CMDLINE_LINUX=\"*([^"]*)\"*
+      backrefs: yes
+      line: GRUB_CMDLINE_LINUX="\g<1> net.ifnames=0 biosdevname=0"
+      backup: yes
+
+  - name: change grub - apply
+    shell: |
+      grub2-mkconfig -o /boot/grub/grub.cfg
+

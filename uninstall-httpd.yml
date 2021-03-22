@@ -1,0 +1,47 @@
+#!/usr/bin/ansible-playbook
+---
+- name: homework 1.3
+  hosts: webservers
+  become: yes
+  become_user: root
+
+  tasks:
+
+## playbook uninstall-httpd.yml
+#### remove httpd, remove index.html, close firewall ports
+
+
+  - name: switch off httpd
+    systemd:
+      name: httpd
+      state: stopped
+      enabled: no
+    ignore_errors: yes
+
+  - name: remove httpd - uninstall
+    package: 
+      name: 
+        - httpd
+      state: absent
+
+#  - name: remove folder /var/www/html/index.html
+#    file:
+#      dest: /var/www/html
+#      state: directory
+
+  - name: remove index.html
+    file:
+      dest: /var/www/html/index.html
+      state: absent
+#    notify: restart httpd
+
+
+  - name: setup firewall
+    firewalld:
+      service: "{{item}}"
+      state: disabled
+      permanent: yes
+      immediate: yes
+    with_items:
+      - http
+      - https
