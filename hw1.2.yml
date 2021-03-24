@@ -7,11 +7,14 @@
 
   tasks:
 
+### this breaks start of networking
   - name: switch off NetworkManager
     systemd:
       name: NetworkManager
-      state: stopped
-      enabled: no
+      state: started
+      enabled: yes
+#      state: stopped
+#      enabled: no
 
   - name: change grub - check
     shell: |
@@ -31,5 +34,5 @@
 
   - name: change grub - apply
     shell: |
-      grub2-mkconfig -o /boot/grub/grub.cfg
+      grub2-mkconfig -o /boot/grub2/grub.cfg
 

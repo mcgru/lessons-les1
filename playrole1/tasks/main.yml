@@ -7,16 +7,26 @@
         - httpd
       state: latest
 
+- name: start httpd
+  systemd:
+      name: httpd
+      state: started
+      enabled: yes
+
+
+### no need
 - name: check if httpd is started and listening
   shell: |
-    ss -ntpl | grep -Pq ":80\s"
+    ps ax | grep -q [h]ttpd  &&  ss -ntpl | grep -Pq ":80\s"
   register: r
   changed_when:  false
   ignore_errors: yes
 
+### no need
 - name: httpd is started
   debug: msg="https is started"
   when: r.rc == 0
+
 
 - name: keep folder /var/www/html/index.html
   file:
@@ -36,4 +46,4 @@
       state: enabled
       permanent: yes
       immediate: yes
-  with_items: {{ services_should_be_opened }}
+  with_items: "{{ services_should_be_opened }}"
