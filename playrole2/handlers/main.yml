@@ -1,0 +1,7 @@
+---
+# handlers file for playrole1
+
+- name: restart vsftpd
+  service: 
+      name:  vsftpd
+      state: restarted

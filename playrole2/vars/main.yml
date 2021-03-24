@@ -1,0 +1,6 @@
+---
+# vars file for playrole2
+
+services_should_be_opened:
+ - http
+ - https

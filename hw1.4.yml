@@ -1,0 +1,21 @@
+#!/usr/bin/ansible-playbook
+
+##№2
+#Напишите плэйбук, который устанавливает и включает FTP (пакет vsftpd),
+#открывает необходимые порты. 
+#Определите в переменных необходимые параметры конфигурации ftp-сервера 
+#и используйте их в j2-шаблоне 
+#для конфига vsftpd.conf:
+#    - разрешен анонимный доступ и аплоад файлов
+#    - /var/ftp/pub - настроены необходимые разрешения и соответствующий SELinux контекст
+#    - SELinux "ftpd_anon_write" boolean - значение "on" (edited)
+
+
+---
+- name: homework 1.3
+  hosts: webservers
+  become: yes
+  become_user: root
+
+  roles:
+    - playrole2

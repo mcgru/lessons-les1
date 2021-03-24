@@ -1,0 +1,54 @@
+---
+# tasks file for playrole1
+
+- name: install vsftpd
+  package: 
+      name: 
+        - vsftpd
+      state: latest
+
+#№2
+# Напишите плэйбук, который устанавливает и включает FTP (пакет vsftpd),
+# открывает необходимые порты. 
+# Определите в переменных необходимые параметры конфигурации ftp-сервера
+# и используйте их в j2-шаблоне для конфига vsftpd.conf:
+#    - разрешен анонимный доступ и аплоад файлов
+#    - /var/ftp/pub - настроены необходимые разрешения и соответствующий SELinux контекст
+#    - SELinux "ftpd_anon_write" boolean - значение "on" (edited)
+
+### modify vsftpd.conf:
+# anonymous_enable=YES
+
+# write_enable=YES
+# #anon_upload_enable=YES
+### anon_root = /var/ftp/pub
+# setsebool -P allow_ftpd_anon_write  on
+
+- name: start vsftpd
+  systemd:
+      name: vsftpd
+      state: started
+      enabled: yes
+
+- name: keep folder /var/ftp/pub
+  file:
+      dest: /var/ftp/pub
+      state: directory
+
+- name: config for vsftpd
+  template:
+      src: index.html.j2
+      dest: /var/www/html/index.html
+  notify: restart httpd
+
+
+- name: setup firewall
+  firewalld:
+      service: "{{item}}"
+      state: enabled
+      permanent: yes
+      immediate: yes
+  with_items:
+    - ftp
+    - ftp-data
+    - ssh
