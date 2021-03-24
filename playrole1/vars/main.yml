@@ -1,0 +1,10 @@
+---
+# vars file for playrole1
+
+www_file_content: "  Welcome to my web server! "
+
+teacher: "Dmitry"
+
+services_should_be_opened:
+ - http
+ - https

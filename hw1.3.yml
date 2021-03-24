@@ -1,0 +1,10 @@
+#!/usr/bin/ansible-playbook
+
+---
+- name: homework 1.1
+  hosts: webservers
+  become: yes
+  become_user: root
+
+  roles:
+    - playrole1

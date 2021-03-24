@@ -1,0 +1,39 @@
+---
+# tasks file for playrole1
+
+- name: install httpd
+  package: 
+      name: 
+        - httpd
+      state: latest
+
+- name: check if httpd is started and listening
+  shell: |
+    ss -ntpl | grep -Pq ":80\s"
+  register: r
+  changed_when:  false
+  ignore_errors: yes
+
+- name: httpd is started
+  debug: msg="https is started"
+  when: r.rc == 0
+
+- name: keep folder /var/www/html/index.html
+  file:
+      dest: /var/www/html
+      state: directory
+
+- name: create index.html
+  template:
+      src: index.html.j2
+      dest: /var/www/html/index.html
+  notify: restart httpd
+
+
+- name: setup firewall
+  firewalld:
+      service: "{{item}}"
+      state: enabled
+      permanent: yes
+      immediate: yes
+  with_items: {{ services_should_be_opened }}
