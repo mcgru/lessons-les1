@@ -14,8 +14,10 @@
 ---
 - name: homework 1.3
   hosts: webservers
+#  hosts: node2
   become: yes
   become_user: root
 
   roles:
-    - playrole2
+    - role: playrole2
+      varrr: any var value

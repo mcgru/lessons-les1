@@ -7,7 +7,7 @@
         - httpd
       state: latest
 
-- name: start httpd
+- name: httpd soudl be started
   systemd:
       name: httpd
       state: started
@@ -24,7 +24,7 @@
 
 ### no need
 - name: httpd is started
-  debug: msg="https is started"
+  debug: msg="https is started and listening"
   when: r.rc == 0
 
 

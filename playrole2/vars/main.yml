@@ -1,6 +1,14 @@
 ---
 # vars file for playrole2
 
-services_should_be_opened:
- - http
- - https
+ports_should_be_opened:
+ - ftp
+ - ssh
+
+## yes/no
+## should be string
+anon_enabled: "yes"
+
+## yes/no
+## should be string
+allow_anon_upload: "yes"

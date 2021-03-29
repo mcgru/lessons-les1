@@ -1,12 +1,6 @@
 ---
 # tasks file for playrole1
 
-- name: install vsftpd
-  package: 
-      name: 
-        - vsftpd
-      state: latest
-
 #№2
 # Напишите плэйбук, который устанавливает и включает FTP (пакет vsftpd),
 # открывает необходимые порты. 
@@ -24,23 +18,17 @@
 ### anon_root = /var/ftp/pub
 # setsebool -P allow_ftpd_anon_write  on
 
-- name: start vsftpd
+- name: install vsftpd
+  package: 
+      name: 
+        - vsftpd
+      state: latest
+
+- name: vsftpd should be started
   systemd:
       name: vsftpd
       state: started
       enabled: yes
-
-- name: keep folder /var/ftp/pub
-  file:
-      dest: /var/ftp/pub
-      state: directory
-
-- name: config for vsftpd
-  template:
-      src: index.html.j2
-      dest: /var/www/html/index.html
-  notify: restart httpd
-
 
 - name: setup firewall
   firewalld:
@@ -49,6 +37,38 @@
       permanent: yes
       immediate: yes
   with_items:
-    - ftp
-    - ftp-data
-    - ssh
+    "{{ports_should_be_opened}}"
+
+- name: keep folder /var/ftp/pub
+  file:
+      dest: /var/ftp/pub
+      state: directory
+      recurse: yes
+      owner: root
+      group: ftp
+      mode: 0730
+
+- name: allow ftpd anon write in SELinux
+  changed_when: false
+  shell: |
+    setsebool -P allow_ftpd_anon_write  on
+
+### i think lineinfile module would fit better in some cases
+#- name: config for vsftpd
+#  template:
+#      src:  vsftpd.cfg.j2
+#      dest: /etc/vsftpd/vsftpd.conf
+#  notify: restart vsftpd
+
+### lineinfile version
+#anonymous_enable={{anon_enabled|string|upper}}
+#anon_upload_enable={{allow_anon_upload|string|upper}}
+- name: config for vsftpd
+  lineinfile:
+      dest: /etc/vsftpd/vsftpd.conf
+      regexp: '^\s*{{item.n}}.*'
+      line:   "{{item.n}}={{item.v}}"
+  loop:
+    - { n: "anonymous_enable", v: "{{anon_enabled|string|upper}}" }
+    - { n: "anon_upload_enable", v: "{{allow_anon_upload|string|upper}}" }
+  notify: restart vsftpd
