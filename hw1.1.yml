@@ -25,6 +25,7 @@
       content: |
         Welcome to my web server!
         {{ansible_default_ipv4.address}}
+        {{ansible_all_ipv4_addresses}}
         {{ansible_date_time.iso8601}}
     notify: restart httpd
 
