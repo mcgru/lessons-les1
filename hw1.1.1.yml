@@ -1,7 +1,13 @@
 #!/usr/bin/ansible-playbook
 
+###     1. Создайте плэйбук, выполняющий установку веб-сервера Apache на управляемом хосте со следующими требованиями:
+#    • установка пакета httpd;
+#    • включение службы веб-сервера и проверка, что он запущен;
+#    • создание файла /var/www/html/index.html с текстом “Welcome to my web server”;
+#    • используйте модуль firewalld для того, чтобы открыть необходимые для работы веб-сервера порты брендмауэра.
+
 ---
-- name: homework 1.1
+- name: homework 1.1.1
   hosts: webservers
   become: yes
   become_user: root
@@ -24,7 +30,6 @@
       dest: /var/www/html/index.html
       content: |
         Welcome to my web server!
-        {{ansible_default_ipv4.address}}
         {{ansible_all_ipv4_addresses}}
         {{ansible_date_time.iso8601}}
     notify: restart httpd

@@ -1,6 +1,14 @@
 #!/usr/bin/ansible-playbook
+
+### Создайте плейбук для изменения файла /etc/default/grub. 
+# Он должен добавить параметры net.ifnames=0 и biosdevname=0 в строку, 
+# выполняющую загрузку ядра. 
+# Выполните grub2-mkconfig, чтобы записать изменения в /etc/default/grub. 
+# Используйте модуль lineinfile для изменения конфигурационного файла.
+
+
 ---
-- name: homework 1.2
+- name: homework 1.1.3
   hosts: webservers
   become: yes
   become_user: root
@@ -8,7 +16,7 @@
   tasks:
 
 ### this breaks start of networking
-  - name: switch off NetworkManager
+  - name: switch on NetworkManager
     systemd:
       name: NetworkManager
       state: started
@@ -28,6 +36,7 @@
     lineinfile:
       path: /etc/default/grub
       regexp: ^\s*GRUB_CMDLINE_LINUX=\"*([^"]*)\"*
+##"
       backrefs: yes
       line: GRUB_CMDLINE_LINUX="\g<1> net.ifnames=0 biosdevname=0"
       backup: yes
