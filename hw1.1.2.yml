@@ -1,0 +1,49 @@
+#!/usr/bin/ansible-playbook
+
+
+##     2.  Создайте плэйбук который:
+#    • удалит httpd с управляемых хостов;
+#    • удалит файл /var/www/html/index.html;
+#    • закроет на фаерволе порты, используемые веб-сервером.
+
+---
+- name: homework 1.1
+  hosts: webservers
+  become: yes
+  become_user: root
+
+  tasks:
+
+  - name: remove httpd
+    package: 
+      name:  httpd
+      state: absent
+
+  - name: create index.html
+    file:
+      dest: /var/www/html/index.html
+      state: absent
+
+  - name: run firewall
+    service:
+      name: "firewalld"
+      state: started
+
+  - name: setup firewall
+    firewalld:
+      service: "{{item}}"
+      state: disabled
+      permanent: yes
+      immediate: yes
+    with_items:
+      - http
+      - https
+
+
+
+  handlers:
+
+  - name: restart httpd
+    service: 
+      name:  httpd
+      state: restarted
