@@ -24,8 +24,14 @@
       dest: /var/www/html/index.html
       content: |
         Welcome to my web server!
+        {{ansible_default_ipv4.address}}
+        {{ansible_date_time.iso8601}}
     notify: restart httpd
 
+  - name: run firewall
+    service:
+      name: "firewalld"
+      state: started
 
   - name: setup firewall
     firewalld:
@@ -36,6 +42,7 @@
     with_items:
       - http
       - https
+
 
 
   handlers:
