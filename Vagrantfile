@@ -42,6 +42,7 @@ chown vagrant: ~vagrant/.ssh/id_ed25519*
 yum install epel-release -y
 yum makecache
 yum install ansible git mc -y
+sudo -u vagrant git clone https://github.com/mcgru/lessons-les1
     RUN
     config.vm.provider "virtualbox" do |v|
      v.memory = 4096
