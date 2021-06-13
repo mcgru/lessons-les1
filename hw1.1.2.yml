@@ -14,12 +14,19 @@
 
   tasks:
 
+  - name: switch off httpd
+    systemd:
+      name: httpd
+      state: stopped
+      enabled: no
+    ignore_errors: yes
+
   - name: remove httpd
     package: 
       name:  httpd
       state: absent
 
-  - name: create index.html
+  - name: remove index.html
     file:
       dest: /var/www/html/index.html
       state: absent
@@ -29,7 +36,7 @@
       name: "firewalld"
       state: started
 
-  - name: setup firewall
+  - name: setup firewall disable http
     firewalld:
       service: "{{item}}"
       state: disabled
