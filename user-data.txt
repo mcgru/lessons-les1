@@ -1,0 +1,4 @@
+user_data:
+ - { name: alice, email: alice@example.com, homedir: /home/alice }
+ - { name: bob ,  email:   bob@example.com, homedir: /home/bob }
+ - { name: carol, email: carol@example.com, homedir: /home/carol }

@@ -1,0 +1,44 @@
+#!/usr/bin/ansible-playbook
+
+### Напишите плейбук для создания пользователей Alice, Bob, Carol. 
+# Для каждого пользователя нужно задать имя, адрес почты в комментарии (username@example.com), 
+# домашнюю папку, пароль в зашифрованном виде – в виде зашифрованной переменной или из отдельного шифрованного файла на выбор.
+# Кроме пароля больше ничего шифровать не нужно. У уже созданных аккаунтов пароль менять не нужно.
+
+### thepass.txt should not be exposable to non-admin users
+
+---
+- name: homework 1.2.2
+  hosts: webservers
+  gather_facts: no
+  become: yes
+  become_user: root
+
+  tasks:
+
+    - name: read user data
+      include_vars:
+        file: user-data.txt
+
+    - name: read user passwords
+      include_vars:
+        file: user-passwords.txt
+
+    - name: add users
+      user:
+#        update_password: on_create
+        name: "{{item.name}}"
+#        password: "{{ item.pass | password_hash('sha512') }}"
+        home: "{{item.homedir}}"
+        shell: /bin/bash
+        comment: "{{item.email}}"
+      loop: "{{user_data}}"
+
+
+    - name: set user passwords
+      user:
+        update_password: on_create
+        name: "{{item.name}}"
+        password: "{{ item.pass | password_hash('sha512') }}"
+      loop: "{{user_passwords}}"
+
