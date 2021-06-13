@@ -30,6 +30,12 @@
       state: started
       enabled: yes
 
+- name: firewalld should be started
+  systemd:
+      name: firewalld
+      state: started
+      enabled: yes
+
 - name: setup firewall
   firewalld:
       service: "{{item}}"
@@ -46,7 +52,16 @@
       recurse: yes
       owner: root
       group: ftp
-      mode: 0733
+      mode: 0755
+
+- name: keep folder /var/ftp/pub/upload
+  file:
+      dest: /var/ftp/pub/upload
+      state: directory
+      recurse: yes
+      owner: root
+      group: ftp
+      mode: 0775
 
 - name: allow ftpd anon write in SELinux
   changed_when: false
