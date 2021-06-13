@@ -52,6 +52,7 @@
   changed_when: false
   shell: |
     setsebool -P allow_ftpd_anon_write  on
+    setsebool -P ftpd_full_access on
 
 ### i think lineinfile module would fit better in some cases
 #- name: config for vsftpd
@@ -71,4 +72,5 @@
   loop:
     - { n: "anonymous_enable", v: "{{anon_enabled|default('yes')|string|upper}}" }
     - { n: "anon_upload_enable", v: "{{allow_anon_upload|default('yes')|string|upper}}" }
+    - { n: "write_enable", v: "{{write_enable|default(allow_anon_upload)|string|upper}}" }
   notify: restart vsftpd
