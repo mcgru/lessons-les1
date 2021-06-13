@@ -24,21 +24,13 @@
       include_vars:
         file: user-passwords.txt
 
+
     - name: add users
       user:
-#        update_password: on_create
         name: "{{item.name}}"
-#        password: "{{ item.pass | password_hash('sha512') }}"
+        password: "{{ ( user_passwords | selectattr('name','contains',item.name) | first ).pass | password_hash('sha512') }}"
+        update_password: on_create
         home: "{{item.homedir}}"
         shell: /bin/bash
         comment: "{{item.email}}"
       loop: "{{user_data}}"
-
-
-    - name: set user passwords
-      user:
-        update_password: on_create
-        name: "{{item.name}}"
-        password: "{{ item.pass | password_hash('sha512') }}"
-      loop: "{{user_passwords}}"
-
