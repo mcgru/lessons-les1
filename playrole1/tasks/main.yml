@@ -1,18 +1,17 @@
+#!/usr/bin/ansible-playbook
+
+###     1. Создайте плэйбук, выполняющий установку веб-сервера Apache на управляемом хосте со следующими требованиями:
+#    • установка пакета httpd;
+#    • включение службы веб-сервера и проверка, что он запущен;
+#    • создание файла /var/www/html/index.html с текстом “Welcome to my web server”;
+#    • используйте модуль firewalld для того, чтобы открыть необходимые для работы веб-сервера порты брендмауэра.
+
 ---
-# tasks file for playrole1
-
 - name: install httpd
-  package: 
-      name: 
-        - httpd
-      state: latest
-
-- name: httpd soudl be started
-  systemd:
-      name: httpd
-      state: started
-      enabled: yes
-
+  package:
+    name:
+      - httpd
+    state: latest
 
 ### no need
 - name: check if httpd is started and listening
@@ -39,6 +38,11 @@
       dest: /var/www/html/index.html
   notify: restart httpd
 
+
+- name: run firewall
+  service:
+      name: "firewalld"
+      state: started
 
 - name: setup firewall
   firewalld:
