@@ -14,6 +14,7 @@ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8cDx29OkWUCBpG6dhhw/1rfsc1n5Etk7Ljo9
 
 mkdir -p  ~root/.ssh
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINOFHVM52dLxvLsL0hQOXRNcRUpwszVvsaAihokSciEd john@mcgru-ant" >> ~root/.ssh/authorized_keys
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8cDx29OkWUCBpG6dhhw/1rfsc1n5Etk7Ljo9/IiTRT john@mcgru-ant" >> ~root/.ssh/authorized_keys
 
 sed -ri 's/^\s*PasswordAuthentication\s+no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd
 SCRIPT
