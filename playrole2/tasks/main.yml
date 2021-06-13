@@ -46,7 +46,7 @@
       recurse: yes
       owner: root
       group: ftp
-      mode: 0730
+      mode: 0733
 
 - name: allow ftpd anon write in SELinux
   changed_when: false
@@ -69,6 +69,6 @@
       regexp: '^\s*{{item.n}}.*'
       line:   "{{item.n}}={{item.v}}"
   loop:
-    - { n: "anonymous_enable", v: "{{anon_enabled|string|upper}}" }
-    - { n: "anon_upload_enable", v: "{{allow_anon_upload|string|upper}}" }
+    - { n: "anonymous_enable", v: "{{anon_enabled|default('yes')|string|upper}}" }
+    - { n: "anon_upload_enable", v: "{{allow_anon_upload|default('yes')|string|upper}}" }
   notify: restart vsftpd
