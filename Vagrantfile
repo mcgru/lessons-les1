@@ -61,8 +61,10 @@ sudo -u vagrant git clone https://github.com/mcgru/lessons-les1
       echo "node1.example.com" > /etc/hostname
       hostname node1.example.com
     RUN
-    config.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--audio", "none"]
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 1048
+      v.cpus = 1
+      v.customize ["modifyvm", :id, "--audio", "none"]
     end
   end
 
@@ -75,8 +77,10 @@ sudo -u vagrant git clone https://github.com/mcgru/lessons-les1
       echo "node2.example.com" > /etc/hostname
       hostname node2.example.com
     RUN
-    config.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--audio", "none"]
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 1048
+      v.cpus = 1
+      v.customize ["modifyvm", :id, "--audio", "none"]
     end
   end
 
