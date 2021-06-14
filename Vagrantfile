@@ -24,6 +24,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "control", primary: true do |control|
     control.vm.box = "centos/8"
 ###    control.vm.hostname = "control.example.com"
+##### vagrant plugin install vagrant-disksize
+#####  fdisk, reboot, xfs_growfs, reboot
+    control.disksize.size = "20GB"
     control.vm.network "forwarded_port", guest: 80, host: 8080
     control.vm.network "private_network", ip: "192.168.56.110"
     control.vm.provision "shell", inline: $hostsfile_update
@@ -49,6 +52,7 @@ sudo -u vagrant git clone https://github.com/mcgru/lessons-les1
      v.memory = 4096
      v.cpus = 2
      v.customize ["modifyvm", :id, "--audio", "none"]
+####     v.disk :disk, size: "20GB", primary: true
     end
   end
 

@@ -20,6 +20,12 @@
         - httpd
       state: latest
 
+  - name: enable httpd on boot
+    service:
+      name: 
+        - httpd
+      enabled: yes
+
   - name: keep folder /var/www/html/index.html
     file:
       dest: /var/www/html
@@ -37,12 +43,13 @@
   - name: run firewall
     service:
       name: "firewalld"
+      enabled: yes
       state: started
 
   - name: setup firewall
     firewalld:
       service: "{{item}}"
-      state: enabled    
+      state: enabled
       permanent: yes
       immediate: yes
     with_items:
